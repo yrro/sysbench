@@ -849,7 +849,13 @@ static int convert_extra_flags(file_flags_t extra_flags, int *open_flags)
 
     if (extra_flags & SB_FILE_FLAG_SYNC)
     {
+#ifdef O_SYNC
       *open_flags |= O_SYNC;
+#else
+      log_text(LOG_FATAL,
+               "--file-extra-flags=sync is not supported on this platform.");
+      return 1;
+#endif
     }
 
     if (extra_flags & SB_FILE_FLAG_DSYNC)
