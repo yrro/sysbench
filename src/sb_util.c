@@ -51,6 +51,8 @@ void *sb_memalign(size_t size, size_t alignment)
   /* Allocate on page boundary */
   (void) alignment; /* unused */
   buffer = valloc(size);
+#elif defined(_WIN32)
+  buf = _aligned_malloc(size, alignment);
 #else
 # error Cannot find an aligned allocation library function!
 #endif
