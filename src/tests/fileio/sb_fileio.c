@@ -584,7 +584,7 @@ int file_execute_event(sb_event_t *sb_req, int thread_id)
   if (file_req->pos + file_req->size > file_size)
   {
     log_text(LOG_FATAL, "I/O request exceeds file size. "
-             "file id: %d file size: %lld req offset: %lld req size: %lld",
+             "file id: %d file size: %" PRIi64 " req offset: %" PRIi64 " req size: %" PRIi64,
              file_req->file_id, (long long) file_size,
              (long long) file_req->pos, (long long) file_req->size);
     return 1;
@@ -605,7 +605,7 @@ int file_execute_event(sb_event_t *sb_req, int thread_id)
                      file_req->size, file_req->pos, thread_id)
          != (ssize_t)file_req->size)
       {
-        log_errno(LOG_FATAL, "Failed to write file! file: " FD_FMT " pos: %lld", 
+        log_errno(LOG_FATAL, "Failed to write file! file: " FD_FMT " pos: %" PRIi64,
                   fd, (long long)file_req->pos);
         return 1;
       }
@@ -627,7 +627,7 @@ int file_execute_event(sb_event_t *sb_req, int thread_id)
                     file_req->size, file_req->pos, thread_id)
          != (ssize_t)file_req->size)
       {
-        log_errno(LOG_FATAL, "Failed to read file! file: " FD_FMT " pos: %lld",
+        log_errno(LOG_FATAL, "Failed to read file! file: " FD_FMT " pos: %" PRIi64,
                   fd, (long long)file_req->pos);
         return 1;
       }
@@ -637,7 +637,7 @@ int file_execute_event(sb_event_t *sb_req, int thread_id)
           file_validate_buffer(per_thread[thread_id].buffer, file_req->size, file_req->pos))
       {
         log_text(LOG_FATAL,
-          "Validation failed on file " FD_FMT ", block offset %lld, exiting...",
+          "Validation failed on file " FD_FMT ", block offset %" PRIi64 ", exiting...",
                  file_req->file_id, (long long) file_req->pos);
         return 1;
       }
@@ -953,7 +953,7 @@ int create_files(void)
   seconds = NS2SEC(sb_timer_stop(&t));
 
   if (written > 0)
-    log_text(LOG_NOTICE, "%llu bytes written in %.2f seconds (%.2f MiB/sec).",
+    log_text(LOG_NOTICE, "%" PRIu64 " bytes written in %.2f seconds (%.2f MiB/sec).",
              written, seconds,
              (double) (written / mebibyte) / seconds);
   else
@@ -1519,7 +1519,7 @@ int parse_arguments(void)
   total_size = sb_get_value_size("file-total-size");
   if (total_size <= 0)
   {
-    log_text(LOG_FATAL, "Invalid value for file-total-size: %lld",
+    log_text(LOG_FATAL, "Invalid value for file-total-size: %" PRIi64,
              (long long)total_size);
     return 1;
   }
@@ -1818,7 +1818,7 @@ int file_validate_buffer(unsigned char  *buf, unsigned int len, size_t offset)
 
   if (checksum != *(unsigned int *)(void *)(buf + cs_offset))
   {
-    log_text(LOG_FATAL, "Checksum mismatch in block with offset: %lld",
+    log_text(LOG_FATAL, "Checksum mismatch in block with offset: %" PRIi64,
              (long long) offset);
     log_text(LOG_FATAL, "    Calculated value: 0x%x    Stored value: 0x%x",
              checksum, *(unsigned int *)(void *)(buf + cs_offset));
