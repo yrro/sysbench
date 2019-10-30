@@ -607,7 +607,7 @@ int main(void) {
 EOF
 
 $CC -o .1 .1.c
-COMPILER=`./.1 2> /dev/null`
+COMPILER="mingw64"
 r=$?
 rm -f .1.c .1
 
