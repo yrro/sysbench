@@ -20,6 +20,11 @@
 # include "config.h"
 #endif
 
+#ifdef __MINGW32__
+# define _POSIX
+# define __USE_MINGW_ALARM
+#endif
+
 #ifdef STDC_HEADERS
 # include <stdio.h>
 # include <stdlib.h>
