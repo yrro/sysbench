@@ -952,7 +952,11 @@ int create_files(void)
     }
     
     /* fsync files to prevent cache flush from affecting test results */
+#ifdef _WIN32
+    _commit(fd);
+#else
     fsync(fd);
+#endif
     close(fd);
   }
 
@@ -1335,7 +1339,11 @@ int file_do_fsync(unsigned int id, int thread_id)
       )
   {
     if (file_fsync_mode == FSYNC_ALL)
+#ifdef _WIN32
+      return _commit(fd);
+#else
       return fsync(fd);
+#endif
 
 #ifdef F_FULLFSYNC
       return fcntl(fd, F_FULLFSYNC) != -1;
