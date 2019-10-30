@@ -168,13 +168,15 @@ AC_ARG_ENABLE(aio,
    enable_aio=yes
 )
 
-AC_CHECK_DECLS(O_SYNC, ,
-   AC_DEFINE([O_SYNC], [O_FSYNC],
-             [Define to the appropriate value for O_SYNC on your platform]),
-   [
+AC_CHECK_DECLS(O_FSYNC, [
+   AC_CHECK_DECLS(O_SYNC, , [
+      AC_DEFINE([O_SYNC], [O_FSYNC],
+                [Define to the appropriate value for O_SYNC on your platform]),
+     [
 #include <fcntl.h>
-   ]
-)
+     ]
+   ])
+])
 
 
 # Checks for libraries.
